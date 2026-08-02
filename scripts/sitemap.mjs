@@ -3,7 +3,7 @@ import siteMetadata from '../data/siteMetadata.js'
 import { allBlogs } from '../.contentlayer/generated/index.mjs'
 
 const sitemap = () => {
-  generateSitemap(siteMetadata.siteUrl, allBlogs)
+  generateSitemap(siteMetadata.siteUrl, allBlogs.filter((post) => post.draft !== true))
   console.log('Sitemap generated...')
 }
 export default sitemap
