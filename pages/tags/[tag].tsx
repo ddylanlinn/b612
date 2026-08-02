@@ -7,7 +7,7 @@ import { InferGetStaticPropsType } from 'next'
 import { allBlogs, allCodings } from 'contentlayer/generated'
 
 export async function getStaticPaths() {
-  const allPosts = [...allBlogs, ...allCodings]
+  const allPosts = [...allBlogs, ...allCodings].filter((post) => post.draft !== true)
   const tags = await getAllTags(allPosts)
 
   return {

@@ -14,8 +14,8 @@ import type { Blog, Coding } from 'contentlayer/generated'
 const MAX_DISPLAY = 27
 
 export const getStaticProps = async () => {
-  const sortedBlogs = sortedBlogPost(allBlogs) as Blog[]
-  const sortedCoding = sortedBlogPost(allCodings) as Coding[]
+  const sortedBlogs = sortedBlogPost(allBlogs.filter((post) => post.draft !== true)) as Blog[]
+  const sortedCoding = sortedBlogPost(allCodings.filter((post) => post.draft !== true)) as Coding[]
   const unSortedPosts = [...sortedBlogs, ...sortedCoding]
   const posts = allCoreContent(unSortedPosts)
 

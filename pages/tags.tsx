@@ -8,7 +8,7 @@ import { GetStaticProps, InferGetStaticPropsType } from 'next'
 import { allBlogs } from 'contentlayer/generated'
 
 export const getStaticProps: GetStaticProps<{ tags: Record<string, number> }> = async () => {
-  const tags = await getAllTags(allBlogs)
+  const tags = await getAllTags(allBlogs.filter((post) => post.draft !== true))
 
   return { props: { tags } }
 }

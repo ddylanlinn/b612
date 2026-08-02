@@ -9,7 +9,7 @@ import { allBlogs, allCodings } from 'contentlayer/generated'
 export async function getStaticPaths() {
   const blogs = allBlogs
   const coding = allCodings
-  const posts = [...blogs, ...coding]
+  const posts = [...blogs, ...coding].filter((post) => post.draft !== true)
   return {
     paths: posts.map((post) => ({
       params: {

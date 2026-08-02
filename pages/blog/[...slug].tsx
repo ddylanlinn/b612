@@ -10,14 +10,16 @@ const DEFAULT_LAYOUT = 'PostLayout'
 
 export async function getStaticPaths() {
   return {
-    paths: allBlogs.map((p) => ({ params: { slug: p.slug.split('/') } })),
+    paths: allBlogs
+      .filter((post) => post.draft !== true)
+      .map((post) => ({ params: { slug: post.slug.split('/') } })),
     fallback: false,
   }
 }
 
 export const getStaticProps = async ({ params }) => {
   const slug = (params.slug as string[]).join('/')
-  const sortedPosts = sortedBlogPost(allBlogs) as Blog[]
+  const sortedPosts = sortedBlogPost(allBlogs.filter((post) => post.draft !== true)) as Blog[]
   const postIndex = sortedPosts.findIndex((p) => p.slug === slug)
   const prevContent = sortedPosts[postIndex + 1] || null
   const prev = prevContent ? coreContent(prevContent) : null
