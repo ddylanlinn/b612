@@ -1,5 +1,4 @@
-import { useState, ReactNode } from 'react'
-import { Comments } from 'pliny/comments'
+import { ReactNode } from 'react'
 import { formatDate } from 'pliny/utils/formatDate'
 import { CoreContent } from 'pliny/utils/contentlayer'
 import type { Blog } from 'contentlayer/generated'
@@ -8,7 +7,7 @@ import PageTitle from '@/components/PageTitle'
 import SectionContainer from '@/components/SectionContainer'
 import { BlogSEO } from '@/components/SEO'
 import siteMetadata from '@/data/siteMetadata'
-import ScrollTopAndComment from '@/components/ScrollTopAndComment'
+import ScrollTop from '@/components/ScrollTop'
 
 interface LayoutProps {
   content: CoreContent<Blog>
@@ -18,14 +17,12 @@ interface LayoutProps {
 }
 
 export default function PostLayout({ content, next, prev, children }: LayoutProps) {
-  const [loadComments, setLoadComments] = useState(false)
-
-  const { path, slug, date, title } = content
+  const { path, date, title } = content
 
   return (
     <SectionContainer>
       <BlogSEO url={`${siteMetadata.siteUrl}/${path}`} {...content} />
-      <ScrollTopAndComment />
+      <ScrollTop />
       <article>
         <div>
           <header>
@@ -47,14 +44,6 @@ export default function PostLayout({ content, next, prev, children }: LayoutProp
             <div className="divide-y divide-gray-200 dark:divide-gray-700 xl:col-span-3 xl:row-span-2 xl:pb-0">
               <div className="prose max-w-none pt-10 pb-8 dark:prose-dark">{children}</div>
             </div>
-            {siteMetadata.comments && (
-              <div className="pt-6 pb-6 text-center text-gray-700 dark:text-gray-300" id="comment">
-                {!loadComments && (
-                  <button onClick={() => setLoadComments(true)}>Load Comments</button>
-                )}
-                {loadComments && <Comments commentsConfig={siteMetadata.comments} slug={slug} />}
-              </div>
-            )}
             <footer>
               <div className="flex flex-col text-sm font-medium sm:flex-row sm:justify-between sm:text-base">
                 {prev && (

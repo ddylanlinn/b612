@@ -1,5 +1,4 @@
-import { useState, ReactNode } from 'react'
-// import { Comments } from 'pliny/comments'
+import { ReactNode } from 'react'
 import { CoreContent } from 'pliny/utils/contentlayer'
 import type { Blog, Authors } from 'contentlayer/generated'
 import Link from '@/components/Link'
@@ -8,9 +7,8 @@ import SectionContainer from '@/components/SectionContainer'
 import { BlogSEO } from '@/components/SEO'
 import Tag from '@/components/Tag'
 import siteMetadata from '@/data/siteMetadata'
-import ScrollTopAndComment from '@/components/ScrollTopAndComment'
+import ScrollTop from '@/components/ScrollTop'
 import Category from '@/components/Category'
-import Comment from '@/components/Comment'
 
 const postDateTemplate: Intl.DateTimeFormatOptions = {
   weekday: 'long',
@@ -29,12 +27,11 @@ interface LayoutProps {
 
 export default function PostLayout({ content, authorDetails, next, prev, children }: LayoutProps) {
   const { path, date, title, tags, categories } = content
-  const [loadComments, setLoadComments] = useState(false)
 
   return (
     <SectionContainer>
       <BlogSEO url={`${siteMetadata.siteUrl}/${path}`} authorDetails={authorDetails} {...content} />
-      <ScrollTopAndComment />
+      <ScrollTop />
       <article>
         <div className='xl:divide-y xl:divide-gray-200 xl:dark:divide-gray-700'>
           <header className='pt-6 xl:pb-6'>
@@ -79,18 +76,6 @@ export default function PostLayout({ content, authorDetails, next, prev, childre
                   </div>
                 </div>
               )}
-              {/* {siteMetadata.comments && (
-                <div
-                  className='pt-6 pb-6 text-center text-gray-700 dark:text-gray-300'
-                  id='comment'
-                >
-                  {!loadComments && (
-                    <button onClick={() => setLoadComments(true)}>Load Comments</button>
-                  )}
-                  {loadComments && <Comments commentsConfig={siteMetadata.comments} slug={slug} />}
-                </div>
-              )} */}
-              {/* <Comment /> */}
             </div>
             <footer>
               <div className='divide-gray-200 text-sm font-medium leading-5 dark:divide-gray-700 xl:col-start-1 xl:row-start-2 xl:divide-y'>

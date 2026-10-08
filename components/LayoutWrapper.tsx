@@ -8,7 +8,6 @@ import MobileNav from './MobileNav'
 import ThemeSwitch from './ThemeSwitch'
 import { ReactNode } from 'react'
 import { useRouter } from 'next/router'
-import Comments from './Comments'
 
 interface Props {
   children: ReactNode | any
@@ -20,7 +19,6 @@ const inter = Inter({
 
 const LayoutWrapper = ({ children }: Props) => {
   const pathName = useRouter().pathname
-  const postId = children?.props?.post?._id || children?.props?.children?.props?.post?._id
   return (
     <SectionContainer>
       <div className={`${inter.className} flex h-screen flex-col justify-between font-sans`}>
@@ -59,7 +57,6 @@ const LayoutWrapper = ({ children }: Props) => {
           </div>
         </header>
         <main className='mb-auto'>{children}</main>
-        <Comments id={postId} />
         <Footer />
       </div>
     </SectionContainer>

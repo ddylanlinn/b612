@@ -7,13 +7,13 @@ const withBundleAnalyzer = require('@next/bundle-analyzer')({
 // You might need to insert additional domains in script-src if you are using external services
 const ContentSecurityPolicy = `
   default-src 'self';
-  script-src 'self' 'unsafe-eval' 'unsafe-inline' giscus.app;
+  script-src 'self' 'unsafe-eval' 'unsafe-inline';
   style-src 'self' 'unsafe-inline';
   img-src * blob: data:;
   media-src 'none';
   connect-src *;
   font-src 'self';
-  frame-src giscus.app
+  frame-src 'none';
 `
 
 const securityHeaders = [
@@ -60,12 +60,6 @@ const securityHeaders = [
 module.exports = () => {
   const plugins = [withContentlayer, withBundleAnalyzer]
   return plugins.reduce((acc, next) => next(acc), {
-    env: {
-      SUPABASE_URL: process.env.SUPABASE_URL,
-      SUPABASE_KEY: process.env.SUPABASE_KEY,
-      SLACK_WEBHOOK_URL: process.env.SLACK_WEBHOOK_URL,
-      SLACK_WEBHOOK_URL_1: process.env.SLACK_WEBHOOK_URL_1,
-    },
     reactStrictMode: true,
     pageExtensions: ['ts', 'tsx', 'js', 'jsx', 'md', 'mdx'],
     eslint: {
