@@ -1,0 +1,11 @@
+---
+import Base from '../layouts/Base.astro'
+import CaseStudy from '../components/CaseStudy.astro'
+import { caseStudies, roles, resumeLinks, workIntro } from '../data/work'
+---
+<Base title="Work · Dylan Lin" description={workIntro}>
+	<header class="page narrow"><p class="eyebrow">Work</p><h1>Systems that help people get work done.</h1><p class="lede">{workIntro}</p></header>
+	<section class="section" aria-labelledby="selected-work"><div class="section-head"><h2 id="selected-work">Selected work</h2></div><div class="case-studies">{caseStudies.map((study) => <CaseStudy study={study} />)}</div></section>
+	<section class="section narrow" aria-labelledby="history"><div class="section-head"><h2 id="history">History</h2></div><ol class="role-list">{roles.map((role) => <li><time>{role.period}</time><div><strong>{role.company}</strong><p>{role.title}</p></div></li>)}</ol></section>
+	<section class="section narrow" aria-labelledby="resume"><div class="section-head"><h2 id="resume">Résumé</h2></div><ul class="link-row">{resumeLinks.map((link) => <li><a href={link.href}>{link.label}</a></li>)}</ul></section>
+</Base>

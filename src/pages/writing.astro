@@ -1,0 +1,15 @@
+---
+import { getCollection } from 'astro:content'
+import Base from '../layouts/Base.astro'
+import ArticleList from '../components/ArticleList.astro'
+import { articleMeta } from '../data/articleMeta'
+
+const posts = (await getCollection('blog', ({ data }) => !data.draft)).sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf())
+const featured = posts.filter((post) => articleMeta[post.id]?.featured)
+const groups = Object.entries(Object.groupBy(posts, (post) => String(post.data.date.getFullYear()))).sort(([a], [b]) => Number(b) - Number(a))
+---
+<Base title="Writing · Dylan Lin" description="Writing about travel, outdoor life, books, and the choices around them.">
+	<header class="page narrow"><p class="eyebrow">Writing</p><h1>Notes kept along the way.</h1><p class="lede">Travel, outdoor life, books, and the choices around them. The articles remain in their original language.</p></header>
+	<section class="section" aria-labelledby="selected-writing"><div class="section-head"><h2 id="selected-writing">Selected</h2></div><ArticleList posts={featured} /></section>
+	<section class="section" aria-labelledby="archive"><div class="section-head"><h2 id="archive">Archive</h2><span class="muted">{posts.length} articles</span></div>{groups.map(([year, yearPosts]) => <section class="year-group"><h2>{year}</h2><ArticleList posts={yearPosts ?? []} showSummary={false} /></section>)}</section>
+</Base>

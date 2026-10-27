@@ -1,0 +1,19 @@
+---
+import { getCollection, render } from 'astro:content'
+import type { CollectionEntry } from 'astro:content'
+import type { GetStaticPaths } from 'astro'
+import Base from '../../layouts/Base.astro'
+import { metaFor } from '../../data/articleMeta'
+
+export const getStaticPaths: GetStaticPaths = async () => (await getCollection('blog', ({ data }) => !data.draft)).map((post) => ({ params: { slug: post.id }, props: { post } }))
+type Props = { post: CollectionEntry<'blog'> }
+const { post } = Astro.props as Props
+const { Content } = await render(post)
+const meta = metaFor(post.id)
+---
+<Base title={`${post.data.title} · Dylan Lin`} description={meta.summary} image={post.data.images[0]} lang="zh-Hant">
+	<article class="article">
+		<header class="article-header"><div class="article-kicker"><time datetime={post.data.date.toISOString()}>{post.data.date.toISOString().slice(0, 10)}</time><span>{meta.topic}</span><span>中文</span></div><h1>{post.data.title}</h1><p class="article-summary">{meta.summary}</p></header>
+		<div class="prose-post"><Content /></div>
+	</article>
+</Base>

@@ -1,0 +1,46 @@
+---
+import { getCollection } from 'astro:content'
+import Base from '../layouts/Base.astro'
+import ArticleList from '../components/ArticleList.astro'
+import CaseStudy from '../components/CaseStudy.astro'
+import { articleMeta, metaFor } from '../data/articleMeta'
+import { caseStudies, contactLinks } from '../data/work'
+
+const posts = (await getCollection('blog', ({ data }) => !data.draft)).sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf())
+const featuredPosts = posts.filter((post) => articleMeta[post.id]?.featured).slice(0, 6)
+const recentPosts = posts.slice(0, 6)
+const features = [
+	{ href: '/work#admin-platform', label: 'Work', title: 'Internal admin platform', text: 'A shared platform used to launch 117+ internal projects.' },
+	{ href: '/blog/camino-intro', label: 'Travel', title: 'Walking across Spain', text: metaFor('camino-intro').summary },
+	{ href: '/blog/exploration-nakanosen-imusu-ivahu', label: 'Outdoors', title: 'Tracing a historic mountain route', text: metaFor('exploration-nakanosen-imusu-ivahu').summary },
+	{ href: '/blog/camino-book-publish', label: 'Publishing', title: 'An 800-kilometre walk became a book', text: metaFor('camino-book-publish').summary },
+]
+---
+<Base title="Dylan Lin" description="Software, publishing, trips, and writing by Dylan Lin.">
+	<section class="hero">
+		<p class="eyebrow">Dylan Lin</p>
+		<h1>Software, publishing,<br />and the roads between.</h1>
+		<p class="lede">I work in software and used to work in publishing. This is where I keep some of my work, trips, and writing.</p>
+	</section>
+
+	<section class="section" aria-labelledby="selected-heading">
+		<div class="section-head"><h2 id="selected-heading">Selected</h2></div>
+		<div class="feature-grid">{features.map((item) => <a class="feature-card" href={item.href}><span>{item.label}</span><h3>{item.title}</h3><p>{item.text}</p></a>)}</div>
+	</section>
+
+	<section class="section" aria-labelledby="work-heading">
+		<div class="section-head"><h2 id="work-heading">Work</h2><a href="/work">All work</a></div>
+		<div class="case-studies">{caseStudies.slice(0, 2).map((study) => <CaseStudy study={study} />)}</div>
+	</section>
+
+	<section class="section" aria-labelledby="writing-heading">
+		<div class="section-head"><h2 id="writing-heading">Writing</h2><a href="/writing">All writing</a></div>
+		<ArticleList posts={featuredPosts.length ? featuredPosts : recentPosts} />
+	</section>
+
+	<section class="section narrow" aria-labelledby="about-heading">
+		<div class="section-head"><h2 id="about-heading">About</h2><a href="/about">More</a></div>
+		<p>I started in editorial and marketing work, moved into software through a year-long full-stack program, and now build products and internal systems in Taipei. Outside work, much of what I have kept comes from mountains, long walks, books, and travel.</p>
+		<ul class="link-row">{contactLinks.map((link) => <li><a href={link.href}>{link.label}</a></li>)}</ul>
+	</section>
+</Base>

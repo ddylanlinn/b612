@@ -1,0 +1,18 @@
+---
+import type { CollectionEntry } from 'astro:content'
+import { metaFor } from '../data/articleMeta'
+
+type Props = { posts: CollectionEntry<'blog'>[]; showSummary?: boolean }
+const { posts, showSummary = true } = Astro.props
+---
+
+<ol class="article-list">
+	{posts.map((post) => {
+		const meta = metaFor(post.id)
+		return <li>
+			<div class="article-meta"><time datetime={post.data.date.toISOString()}>{post.data.date.getFullYear()}</time><span>{meta.topic}</span><span>中文</span></div>
+			<h3><a href={`/blog/${post.id}`}>{post.data.title}</a></h3>
+			{showSummary && <p>{meta.summary}</p>}
+		</li>
+	})}
+</ol>

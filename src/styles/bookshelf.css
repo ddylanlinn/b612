@@ -1,0 +1,300 @@
+:root {
+	--void: #eeeae1;
+	--ink: #24231f;
+	--muted: #716b61;
+	--accent: #9b4935;
+	--line: rgb(36 35 31 / 18%);
+	--surface: rgb(245 241 232 / 84%);
+	--surface-strong: rgb(238 234 225 / 97%);
+	--vignette: rgb(83 72 57 / 17%);
+	font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, 'PingFang TC', 'Noto Sans TC', sans-serif;
+	color: var(--ink);
+	background: var(--void);
+}
+
+html[data-theme='dark'] {
+	--void: #07090d;
+	--ink: #f2ede3;
+	--muted: #a49f96;
+	--accent: #d9856d;
+	--line: rgb(242 237 227 / 16%);
+	--surface: rgb(14 17 23 / 82%);
+	--surface-strong: rgb(7 9 13 / 97%);
+	--vignette: rgb(0 0 0 / 52%);
+}
+
+* { box-sizing: border-box; }
+html, body { width: 100%; min-height: 100%; margin: 0; overflow: hidden; background: var(--void); }
+body { font-size: 16px; }
+button, a { color: inherit; font: inherit; }
+button { cursor: pointer; }
+
+.skip-link {
+	position: fixed;
+	top: -5rem;
+	left: 1rem;
+	z-index: 30;
+	padding: .7rem 1rem;
+	color: var(--void);
+	background: var(--ink);
+}
+.skip-link:focus { top: 1rem; }
+
+.bookshelf-header {
+	position: fixed;
+	top: 0;
+	left: 0;
+	z-index: 12;
+	display: flex;
+	align-items: center;
+	gap: .65rem;
+	padding: 1.3rem 1.5rem;
+	font-size: .78rem;
+	letter-spacing: .08em;
+	text-transform: uppercase;
+}
+.bookshelf-header a {
+	font-family: 'Iowan Old Style', Georgia, 'Noto Serif TC', serif;
+	font-size: 1rem;
+	text-decoration: none;
+	text-transform: none;
+}
+.bookshelf-header span { color: var(--accent); }
+.bookshelf-header strong { color: var(--muted); font-weight: 500; }
+
+.bookshelf-stage {
+	position: fixed;
+	inset: 0;
+	isolation: isolate;
+	overflow: hidden;
+	background: var(--void);
+}
+.bookshelf-stage::after {
+	position: absolute;
+	inset: 0;
+	z-index: 4;
+	pointer-events: none;
+	content: '';
+	background:
+		radial-gradient(circle, transparent 48%, var(--vignette) 125%),
+		linear-gradient(105deg, transparent 20%, rgb(255 255 255 / 3%) 50%, transparent 76%);
+}
+.scene { position: absolute; inset: 0; z-index: 2; touch-action: none; }
+.scene canvas { display: block; width: 100%; height: 100%; }
+
+.bookshelf-title {
+	position: absolute;
+	top: 14%;
+	left: 50%;
+	z-index: 5;
+	width: min(48rem, 82vw);
+	pointer-events: none;
+	text-align: center;
+	transform: translateX(-50%);
+}
+.bookshelf-title p {
+	margin: 0 0 .8rem;
+	color: var(--accent);
+	font-size: .7rem;
+	font-weight: 750;
+	letter-spacing: .14em;
+	text-transform: uppercase;
+}
+.bookshelf-title h1 {
+	margin: 0;
+	font-family: 'Iowan Old Style', Georgia, 'Noto Serif TC', serif;
+	font-size: clamp(2.8rem, 5vw, 5.4rem);
+	font-weight: 500;
+	letter-spacing: -.045em;
+	line-height: .94;
+}
+
+.bookshelf-status {
+	position: fixed;
+	top: 50%;
+	left: 50%;
+	z-index: 8;
+	margin: 0;
+	padding: .75rem 1rem;
+	color: var(--muted);
+	background: var(--surface);
+	transform: translate(-50%, -50%);
+}
+.bookshelf-status.is-error { color: var(--accent); }
+
+.gesture-hint {
+	position: fixed;
+	bottom: 1.5rem;
+	left: 1.5rem;
+	z-index: 10;
+	margin: 0;
+	color: var(--muted);
+	font-size: .68rem;
+	letter-spacing: .1em;
+}
+.book-position {
+	position: fixed;
+	right: 2rem;
+	bottom: 5.5rem;
+	z-index: 10;
+	margin: 0;
+	color: var(--muted);
+	font-size: .68rem;
+	letter-spacing: .28em;
+	writing-mode: vertical-rl;
+}
+
+.theme-toggle,
+.list-toggle {
+	position: fixed;
+	z-index: 16;
+	min-height: 2.8rem;
+	padding: 0 .95rem;
+	border: 1px solid var(--line);
+	border-radius: 999px;
+	color: var(--ink);
+	background: var(--surface);
+	backdrop-filter: blur(14px);
+}
+.theme-toggle { top: 1rem; right: 1.25rem; }
+.list-toggle { right: 1.25rem; bottom: 1.25rem; }
+
+.book-panel {
+	position: fixed;
+	top: 0;
+	right: 0;
+	z-index: 18;
+	width: min(31rem, 90vw);
+	height: 100dvh;
+	padding: clamp(5rem, 11vh, 8rem) clamp(1.5rem, 4vw, 3.5rem) 2rem;
+	overflow-y: auto;
+	border-left: 1px solid var(--line);
+	background: var(--surface);
+	backdrop-filter: blur(24px);
+	transform: translateX(105%);
+	transition: transform 500ms cubic-bezier(.2, .8, .2, 1);
+}
+.book-panel.is-open { transform: translateX(0); }
+.panel-close {
+	position: absolute;
+	top: 1rem;
+	right: 1rem;
+	width: 3rem;
+	height: 3rem;
+	border: 1px solid var(--line);
+	border-radius: 50%;
+	color: var(--ink);
+	background: transparent;
+	font-size: 1.5rem;
+}
+.panel-label {
+	color: var(--accent);
+	font-size: .7rem;
+	font-weight: 700;
+	letter-spacing: .14em;
+	text-transform: uppercase;
+}
+.book-panel h2 {
+	max-width: 24rem;
+	margin: 1rem 0 .5rem;
+	font-family: 'Iowan Old Style', Georgia, 'Noto Serif TC', serif;
+	font-size: clamp(2.8rem, 6vw, 5rem);
+	font-weight: 500;
+	letter-spacing: -.04em;
+	line-height: 1;
+}
+.panel-author, .panel-placeholder { color: var(--muted); }
+.book-panel dl {
+	display: grid;
+	grid-template-columns: 1fr 1fr;
+	gap: 1rem;
+	margin: 3rem 0;
+}
+.book-panel dl div { padding-top: .8rem; border-top: 1px solid var(--line); }
+.book-panel dt { color: var(--muted); font-size: .68rem; letter-spacing: .1em; text-transform: uppercase; }
+.book-panel dd { margin: .3rem 0 0; }
+.panel-sections { display: flex; flex-wrap: wrap; gap: .55rem; }
+.panel-sections span {
+	padding: .35rem .65rem;
+	border: 1px solid var(--line);
+	border-radius: 999px;
+	color: var(--muted);
+	font-size: .7rem;
+}
+.panel-placeholder {
+	margin-top: 2rem;
+	font-family: 'Iowan Old Style', Georgia, 'Noto Serif TC', serif;
+	line-height: 1.7;
+}
+
+.book-list {
+	position: fixed;
+	inset: 0;
+	z-index: 17;
+	display: none;
+	padding: max(5rem, 9vh) 1.5rem 5rem;
+	overflow-y: auto;
+	background: var(--surface-strong);
+}
+.book-list.is-open { display: block; }
+.book-list-header {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	width: min(58rem, 100%);
+	margin: 0 auto 1rem;
+}
+.book-list-header p { font-family: 'Iowan Old Style', Georgia, serif; font-size: 1.5rem; }
+.book-list-header button { padding: .6rem .85rem; border: 1px solid var(--line); color: var(--ink); background: transparent; }
+.book-list-items button {
+	display: grid;
+	grid-template-columns: 3rem 1fr auto;
+	gap: 1rem;
+	align-items: baseline;
+	width: min(58rem, 100%);
+	margin: 0 auto;
+	padding: 1.35rem 0;
+	border: 0;
+	border-bottom: 1px solid var(--line);
+	color: var(--ink);
+	background: transparent;
+	text-align: left;
+}
+.book-list-items button:first-child { border-top: 1px solid var(--line); }
+.book-list-items span, .book-list-items small { color: var(--muted); }
+.book-list-items strong {
+	font-family: 'Iowan Old Style', Georgia, 'Noto Serif TC', serif;
+	font-size: clamp(1.7rem, 5vw, 3.2rem);
+	font-weight: 500;
+}
+
+@media (max-width: 720px) {
+	.bookshelf-header { padding: 1rem; }
+	.bookshelf-header strong { display: none; }
+	.theme-toggle { top: .7rem; right: .7rem; }
+	.list-toggle { top: 4.3rem; right: .7rem; bottom: auto; }
+	.bookshelf-title { top: 5.3rem; left: 1rem; width: calc(100% - 2rem); text-align: left; transform: none; }
+	.bookshelf-title h1 { font-size: clamp(2.3rem, 11vw, 3.8rem); }
+	.gesture-hint { bottom: 1.2rem; left: 1rem; width: 10rem; line-height: 1.5; }
+	.book-position { right: .7rem; bottom: 5.2rem; }
+	.book-panel {
+		top: auto;
+		bottom: 0;
+		width: 100%;
+		height: min(72dvh, 42rem);
+		padding: 4.5rem 1.25rem 2rem;
+		border-top: 1px solid var(--line);
+		border-left: 0;
+		border-radius: 1.2rem 1.2rem 0 0;
+		transform: translateY(105%);
+	}
+	.book-panel.is-open { transform: translateY(0); }
+	.book-panel h2 { font-size: clamp(2.6rem, 13vw, 4.5rem); }
+	.book-list-items button { grid-template-columns: 2rem 1fr; }
+	.book-list-items small { grid-column: 2; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+	.book-panel { transition-duration: 1ms; }
+	.gesture-hint { display: none; }
+}

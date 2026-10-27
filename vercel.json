@@ -1,0 +1,13 @@
+{
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "redirects": [
+    { "source": "/blog", "destination": "/writing", "permanent": true },
+    { "source": "/coding", "destination": "/writing", "permanent": true },
+    { "source": "/projects", "destination": "/work", "permanent": true },
+    { "source": "/tags", "destination": "/writing", "permanent": true },
+    { "source": "/categories", "destination": "/writing", "permanent": true },
+    { "source": "/blog/page/:path*", "destination": "/writing", "permanent": true },
+    { "source": "/tags/:path*", "destination": "/writing", "permanent": true },
+    { "source": "/categories/:path*", "destination": "/writing", "permanent": true }
+  ]
+}

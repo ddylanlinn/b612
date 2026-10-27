@@ -1,0 +1,12 @@
+---
+type Props = { study: { id: string; title: string; context: string; role: string; change: string } }
+const { study } = Astro.props
+---
+<article class="case-study" id={study.id}>
+	<h3>{study.title}</h3>
+	<dl>
+		<div><dt>Context</dt><dd>{study.context}</dd></div>
+		<div><dt>My role</dt><dd>{study.role}</dd></div>
+		<div><dt>What changed</dt><dd>{study.change}</dd></div>
+	</dl>
+</article>

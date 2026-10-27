@@ -1,0 +1,80 @@
+---
+// Two motion models for the hidden Bookshelf route, switched with ?variant=B|C.
+import VariantB from '../components/bookshelf-prototype/VariantB.astro'
+import VariantC from '../components/bookshelf-prototype/VariantC.astro'
+import { prototypeBooks } from '../data/bookshelfPrototype'
+import '../styles/bookshelf-prototype.css'
+
+const isProduction = import.meta.env.PROD
+---
+
+<!doctype html>
+<html lang="en" data-theme="dark">
+	<head>
+		<script is:inline>document.documentElement.dataset.theme = new URLSearchParams(window.location.search).get('theme') === 'light' ? 'light' : 'dark'</script>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		<meta name="robots" content="noindex, nofollow" />
+		<title>Bookshelf motion prototype · Dylan Lin</title>
+		<meta name="description" content="A local motion prototype for the B612 Bookshelf." />
+	</head>
+	<body>
+		<a class="skip-link" href="#prototype-question">Skip to prototype question</a>
+		<header class="prototype-header">
+			<a href="/">Dylan Lin</a>
+			<span>/</span>
+			<strong>Bookshelf prototype</strong>
+		</header>
+
+		<main>
+			<div class="prototype-question" id="prototype-question">
+				<span>Prototype question</span>
+				<p>Which motion model feels immersive without making the books hard to browse?</p>
+			</div>
+
+			<VariantB />
+			<VariantC />
+
+			<aside class="book-panel" aria-live="polite" aria-hidden="true">
+				<button class="panel-close" type="button" aria-label="Close book details">×</button>
+				<p class="panel-label">Selected book</p>
+				<h2></h2>
+				<p class="panel-author"></p>
+				<dl>
+					<div><dt>Status</dt><dd class="panel-status"></dd></div>
+					<div><dt>ISBN</dt><dd class="panel-isbn"></dd></div>
+				</dl>
+				<div class="panel-sections">
+					<span>Overview</span><span>Notes</span><span>Highlights</span><span>Connections</span>
+				</div>
+				<p class="panel-placeholder">Reading notes will appear here when this becomes the real page.</p>
+			</aside>
+
+			<button class="list-toggle" type="button" aria-expanded="false">List view</button>
+			<aside class="book-list" aria-hidden="true">
+				{prototypeBooks.map((book, index) => (
+					<button type="button" data-book-index={index}>
+						<span>{String(index + 1).padStart(2, '0')}</span>
+						<strong>{book.title}</strong>
+						<small>{book.author}</small>
+					</button>
+				))}
+			</aside>
+
+			{!isProduction && (
+				<div class="prototype-controls">
+					<button class="theme-toggle" type="button">Light</button>
+					<nav class="prototype-switcher" aria-label="Prototype variants">
+						<button type="button" data-variant-target="B">B</button>
+						<button type="button" data-variant-target="C">C</button>
+					</nav>
+				</div>
+			)}
+			<p class="gesture-hint">Swipe in any direction · Tap a book</p>
+		</main>
+
+		<script>
+			import '../scripts/bookshelf-prototype'
+		</script>
+	</body>
+</html>

@@ -1,92 +1,38 @@
 {
-  "name": "starter-blog",
-  "homepage": "https://ddylanlin.github.io/next-web",
+  "name": "b612",
+  "type": "module",
   "version": "0.0.1",
   "private": true,
   "engines": {
-    "node": "20.x"
+    "node": ">=22.19.0"
   },
   "scripts": {
-    "start": "next dev",
-    "dev": "INIT_CWD=$PWD next dev",
-    "build": "contentlayer build && INIT_CWD=$PWD next build && cross-env NODE_OPTIONS='--experimental-json-modules' node -r esbuild-register ./scripts/postbuild.mjs",
-    "serve": "next start",
-    "analyze": "cross-env ANALYZE=true next build",
-    "lint": "next lint --fix --dir pages --dir components --dir lib --dir layouts --dir scripts",
-    "predeploy": "npm run build",
-    "deploy": "gh-pages -d build"
-  },
-  "browser": {
-    "fs": false,
-    "path": false,
-    "os": false
+    "dev": "astro dev",
+    "check": "astro check",
+    "validate:content": "node scripts/validate-content.mjs",
+    "validate:routes": "node scripts/validate-routes.mjs",
+    "build": "npm run validate:content && astro build && npm run validate:routes",
+    "preview": "astro preview",
+    "astro": "astro"
   },
   "dependencies": {
-    "@next/bundle-analyzer": "13.1.6",
-    "@next/font": "13.1.6",
-    "@tailwindcss/forms": "^0.5.3",
-    "@tailwindcss/typography": "^0.5.9",
-    "@vercel/analytics": "^0.1.8",
-    "autoprefixer": "^10.4.13",
-    "contentlayer": "0.3.4",
-    "esbuild": "0.17.19",
-    "gh-pages": "^5.0.0",
-    "github-slugger": "^2.0.0",
-    "globby": "^11.0.3",
-    "gray-matter": "^4.0.3",
-    "image-size": "1.0.2",
-    "mdx-bundler": "^9.2.1",
-    "next": "13.1.6",
-    "next-contentlayer": "0.3.4",
-    "next-themes": "^0.2.1",
-    "pliny": "0.0.9",
-    "postcss": "^8.4.21",
-    "react": "18.2.0",
-    "react-dom": "18.2.0",
-    "reading-time": "1.5.0",
-    "rehype-autolink-headings": "^6.1.1",
-    "rehype-citation": "^0.4.0",
-    "rehype-katex": "^6.0.2",
-    "rehype-preset-minify": "6.0.0",
-    "rehype-prism-plus": "^1.5.0",
-    "rehype-slug": "^5.1.0",
-    "remark": "^14.0.2",
-    "remark-gfm": "^3.0.1",
-    "remark-math": "^5.1.1",
-    "tailwindcss": "^3.2.4",
-    "unist-util-visit": "^4.1.2"
+    "@astrojs/mdx": "^8.0.1",
+    "@astrojs/rss": "^4.0.15",
+    "@astrojs/sitemap": "^3.7.4",
+    "@tailwindcss/vite": "^4.3.3",
+    "astro": "^7.3.3",
+    "tailwindcss": "^4.3.3",
+    "three": "^0.186.1"
   },
-  "devDependencies": {
-    "@svgr/webpack": "^6.5.1",
-    "@tailwindcss/line-clamp": "^0.4.2",
-    "@types/react": "^18.0.27",
-    "@typescript-eslint/eslint-plugin": "^5.49.0",
-    "@typescript-eslint/parser": "^5.49.0",
-    "cross-env": "^7.0.3",
-    "dedent": "^0.7.0",
-    "esbuild-register": "3.4.2",
-    "eslint": "^8.32.0",
-    "eslint-config-next": "^13.1.6",
-    "eslint-config-prettier": "^8.6.0",
-    "eslint-plugin-prettier": "^4.2.1",
-    "file-loader": "^6.2.0",
-    "husky": "^8.0.3",
-    "js-yaml": "4.1.0",
-    "lint-staged": "^13.1.0",
-    "prettier": "^2.8.3",
-    "prettier-plugin-tailwindcss": "^0.2.2",
-    "typescript": "^4.9.4"
+  "allowScripts": {
+    "esbuild": true
   },
   "overrides": {
-    "qs": "^6.14.1",
-    "protobufjs": ">=7.5.6"
+    "zod": "4.6.7"
   },
-  "lint-staged": {
-    "*.+(js|jsx|ts|tsx)": [
-      "eslint --fix"
-    ],
-    "*.+(js|jsx|ts|tsx|json|css|md|mdx)": [
-      "prettier --write"
-    ]
+  "devDependencies": {
+    "@astrojs/check": "^0.9.10",
+    "@types/three": "^0.186.0",
+    "typescript": "^6.0.3"
   }
 }

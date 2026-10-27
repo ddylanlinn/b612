@@ -1,0 +1,45 @@
+# Captured from the legacy Next.js source before replacement.
+# Published article routes: 23
+/
+/about
+/blog
+/blog/atlas-shrugged
+/blog/auschwitz
+/blog/boycott
+/blog/brave-new-world
+/blog/camino-backpack-weight
+/blog/camino-book-publish
+/blog/camino-intro
+/blog/camino-language-thinking
+/blog/camino-pirineos
+/blog/camino-travel-meaning
+/blog/climate-greta
+/blog/environmental-protection
+/blog/exploration-nakanosen-imusu-ivahu
+/blog/mountain-is-there
+/blog/mountain-social-events-education
+/blog/mt-fuji-crowd
+/blog/orchid-island
+/blog/outdoor-personality
+/blog/taipei-marathon-2019
+/blog/through-the-language-glass
+/blog/unschooling-kayak-sailing
+/blog/vast-interview
+/blog/yangmingshan-dayoukeng
+/categories
+/coding
+/coding/gcp-deployment
+/coding/nested-route/introducing-multi-part-posts-with-nested-routing
+/projects
+/tags
+
+# Dynamic legacy route families
+/blog/page/*
+/categories/*
+/tags/*
+
+# Removed API surface
+/api/comment
+/api/get-comments
+/api/get-comments-count
+/api/newsletter

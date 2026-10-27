@@ -1,0 +1,13 @@
+---
+import Base from '../layouts/Base.astro'
+import { timeline } from '../data/timeline'
+import { contactLinks } from '../data/work'
+---
+<Base title="About · Dylan Lin" description="About Dylan Lin: software, publishing, travel, and outdoor life.">
+	<header class="page narrow"><p class="eyebrow">About</p><h1>One path, several kinds of work.</h1></header>
+	<div class="narrow">
+		<section class="section"><p class="lede">I am a software engineer based in Taipei. Before software, I worked in editorial and marketing roles.</p><p>I tend to stay with problems that cross boundaries: a product question that needs a technical system, a team bottleneck that needs better tooling, or an experience that becomes clearer through writing. The titles have changed, but the work has usually involved making complicated things easier to understand and use.</p><p>Outside work, I have walked the Camino de Santiago, explored mountain routes in Taiwan, trained from no running background to a marathon, and published a book based on the Camino journey.</p></section>
+		<section class="section" aria-labelledby="timeline-heading"><div class="section-head"><h2 id="timeline-heading">Timeline</h2></div><ol class="timeline">{timeline.map((item) => <li><time>{item.period}</time><div><strong>{item.href ? <a href={item.href}>{item.title}</a> : item.title}</strong>{item.detail && <p>{item.detail}</p>}</div></li>)}</ol></section>
+		<section class="section" aria-labelledby="contact-heading"><div class="section-head"><h2 id="contact-heading">Contact</h2></div><ul class="link-row">{contactLinks.map((link) => <li><a href={link.href}>{link.label}</a></li>)}</ul></section>
+	</div>
+</Base>
