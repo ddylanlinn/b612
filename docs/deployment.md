@@ -8,7 +8,7 @@
 - Cloudflare owns DNS and the non-www to www redirect
 - Vercel builds static pages and the Bookshelf server endpoint
 
-Target Vercel settings are Node.js 22, `npm ci`, and `npm run build`.
+The repository pins Vercel to the Astro preset and Node.js 22. Vercel installs with `npm ci` and builds with `npm run build`.
 
 Configure these Production and Preview variables in Vercel:
 
