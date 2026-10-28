@@ -12,17 +12,6 @@
 	background: var(--void);
 }
 
-html[data-theme='dark'] {
-	--void: #07090d;
-	--ink: #f2ede3;
-	--muted: #a49f96;
-	--accent: #d9856d;
-	--line: rgb(242 237 227 / 16%);
-	--surface: rgb(14 17 23 / 82%);
-	--surface-strong: rgb(7 9 13 / 97%);
-	--vignette: rgb(0 0 0 / 52%);
-}
-
 * { box-sizing: border-box; }
 html, body { width: 100%; min-height: 100%; margin: 0; overflow: hidden; background: var(--void); }
 body { font-size: 16px; }
@@ -86,7 +75,7 @@ button { cursor: pointer; }
 	position: absolute;
 	top: 14%;
 	left: 50%;
-	z-index: 5;
+	z-index: 7;
 	width: min(48rem, 82vw);
 	pointer-events: none;
 	text-align: center;
@@ -107,6 +96,7 @@ button { cursor: pointer; }
 	font-weight: 500;
 	letter-spacing: -.045em;
 	line-height: .94;
+	text-shadow: 0 0 24px var(--void), 0 0 24px var(--void);
 }
 
 .bookshelf-status {
@@ -122,16 +112,6 @@ button { cursor: pointer; }
 }
 .bookshelf-status.is-error { color: var(--accent); }
 
-.gesture-hint {
-	position: fixed;
-	bottom: 1.5rem;
-	left: 1.5rem;
-	z-index: 10;
-	margin: 0;
-	color: var(--muted);
-	font-size: .68rem;
-	letter-spacing: .1em;
-}
 .book-position {
 	position: fixed;
 	right: 2rem;
@@ -144,7 +124,6 @@ button { cursor: pointer; }
 	writing-mode: vertical-rl;
 }
 
-.theme-toggle,
 .list-toggle {
 	position: fixed;
 	z-index: 16;
@@ -156,8 +135,18 @@ button { cursor: pointer; }
 	background: var(--surface);
 	backdrop-filter: blur(14px);
 }
-.theme-toggle { top: 1rem; right: 1.25rem; }
 .list-toggle { right: 1.25rem; bottom: 1.25rem; }
+
+.panel-backdrop {
+	position: fixed;
+	inset: 0;
+	z-index: 17;
+	pointer-events: none;
+	border: 0;
+	background: transparent;
+	opacity: 0;
+}
+.panel-backdrop.is-open { pointer-events: auto; opacity: 1; }
 
 .book-panel {
 	position: fixed;
@@ -198,10 +187,11 @@ button { cursor: pointer; }
 	max-width: 24rem;
 	margin: 1rem 0 .5rem;
 	font-family: 'Iowan Old Style', Georgia, 'Noto Serif TC', serif;
-	font-size: clamp(2.8rem, 6vw, 5rem);
+	font-size: clamp(2.2rem, 3.3vw, 3.5rem);
 	font-weight: 500;
 	letter-spacing: -.04em;
-	line-height: 1;
+	line-height: 1.08;
+	overflow-wrap: anywhere;
 }
 .panel-author, .panel-placeholder { color: var(--muted); }
 .book-panel dl {
@@ -271,11 +261,9 @@ button { cursor: pointer; }
 @media (max-width: 720px) {
 	.bookshelf-header { padding: 1rem; }
 	.bookshelf-header strong { display: none; }
-	.theme-toggle { top: .7rem; right: .7rem; }
 	.list-toggle { top: 4.3rem; right: .7rem; bottom: auto; }
 	.bookshelf-title { top: 5.3rem; left: 1rem; width: calc(100% - 2rem); text-align: left; transform: none; }
 	.bookshelf-title h1 { font-size: clamp(2.3rem, 11vw, 3.8rem); }
-	.gesture-hint { bottom: 1.2rem; left: 1rem; width: 10rem; line-height: 1.5; }
 	.book-position { right: .7rem; bottom: 5.2rem; }
 	.book-panel {
 		top: auto;
@@ -289,12 +277,11 @@ button { cursor: pointer; }
 		transform: translateY(105%);
 	}
 	.book-panel.is-open { transform: translateY(0); }
-	.book-panel h2 { font-size: clamp(2.6rem, 13vw, 4.5rem); }
+	.book-panel h2 { font-size: clamp(2rem, 9vw, 3rem); }
 	.book-list-items button { grid-template-columns: 2rem 1fr; }
 	.book-list-items small { grid-column: 2; }
 }
 
 @media (prefers-reduced-motion: reduce) {
 	.book-panel { transition-duration: 1ms; }
-	.gesture-hint { display: none; }
 }

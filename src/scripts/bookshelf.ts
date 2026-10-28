@@ -24,8 +24,6 @@ class BookshelfScene {
 	private bookMeshes: THREE.Mesh[] = []
 	private raycaster = new THREE.Raycaster()
 	private pointer = new THREE.Vector2(2, 2)
-	private floorMaterial: THREE.MeshStandardMaterial
-	private ambientLight: THREE.AmbientLight
 	private focusIndex: number
 	private selectedIndex: number | null = null
 	private hoveredIndex: number | null = null
@@ -58,11 +56,10 @@ class BookshelfScene {
 
 		this.camera = new THREE.PerspectiveCamera(42, window.innerWidth / window.innerHeight, 0.1, 100)
 		this.camera.position.set(0, 0, window.innerWidth < 720 ? 10.5 : 12.5)
-		this.scene.fog = new THREE.FogExp2(this.isLightTheme() ? 0xeeeae1 : 0x07090d, 0.035)
+		this.scene.fog = new THREE.FogExp2(0xeeeae1, 0.035)
 		this.scene.add(this.bookGroup)
 
-		this.ambientLight = new THREE.AmbientLight(this.isLightTheme() ? 0xfff6e6 : 0xc4ced8, this.isLightTheme() ? 2 : 1.4)
-		this.scene.add(this.ambientLight)
+		this.scene.add(new THREE.AmbientLight(0xfff6e6, 2))
 		const warmLight = new THREE.DirectionalLight(0xffb497, 4.8)
 		warmLight.position.set(5, 7, 9)
 		warmLight.castShadow = true
@@ -72,11 +69,11 @@ class BookshelfScene {
 		coolLight.position.set(-6, -3, 4)
 		this.scene.add(coolLight)
 
-		this.floorMaterial = new THREE.MeshStandardMaterial({
-			color: this.isLightTheme() ? 0xe8e4dc : 0x111318,
+		const floorMaterial = new THREE.MeshStandardMaterial({
+			color: 0xe8e4dc,
 			roughness: 0.92,
 		})
-		const floor = new THREE.Mesh(new THREE.PlaneGeometry(120, 18), this.floorMaterial)
+		const floor = new THREE.Mesh(new THREE.PlaneGeometry(120, 18), floorMaterial)
 		floor.position.set(0, -1.52, -0.25)
 		floor.rotation.x = -Math.PI / 2
 		floor.receiveShadow = true
@@ -86,10 +83,6 @@ class BookshelfScene {
 		this.updateFocusTarget()
 		this.bindEvents()
 		this.animate()
-	}
-
-	private isLightTheme() {
-		return document.documentElement.dataset.theme !== 'dark'
 	}
 
 	private coverTexture(book: Book, index: number) {
@@ -127,7 +120,7 @@ class BookshelfScene {
 
 	private loadCover(url: string, material: THREE.MeshStandardMaterial) {
 		new THREE.TextureLoader().load(
-			url,
+			`/api/book-cover?url=${encodeURIComponent(url)}`,
 			(texture) => {
 				texture.colorSpace = THREE.SRGBColorSpace
 				texture.anisotropy = Math.min(8, this.renderer.capabilities.getMaxAnisotropy())
@@ -273,14 +266,6 @@ class BookshelfScene {
 		this.selectedIndex = null
 	}
 
-	setTheme(theme: 'light' | 'dark') {
-		const light = theme === 'light'
-		this.scene.fog?.color.set(light ? 0xeeeae1 : 0x07090d)
-		this.floorMaterial.color.set(light ? 0xe8e4dc : 0x111318)
-		this.ambientLight.color.set(light ? 0xfff6e6 : 0xc4ced8)
-		this.ambientLight.intensity = light ? 2 : 1.4
-	}
-
 	private animate = () => {
 		requestAnimationFrame(this.animate)
 		const now = performance.now()
@@ -329,6 +314,7 @@ class BookshelfScene {
 
 const status = document.querySelector<HTMLElement>('.bookshelf-status')!
 const panel = document.querySelector<HTMLElement>('.book-panel')!
+const panelBackdrop = document.querySelector<HTMLElement>('.panel-backdrop')!
 const list = document.querySelector<HTMLElement>('.book-list')!
 const listItems = document.querySelector<HTMLElement>('.book-list-items')!
 let bookshelf: BookshelfScene | null = null
@@ -341,11 +327,13 @@ function showBook(book: Book) {
 	panel.querySelector<HTMLElement>('.panel-rating')!.textContent = book.rating == null ? '未評分' : `${book.rating} / 5`
 	panel.querySelector<HTMLElement>('.panel-finished')!.textContent = book.finishedAt ?? '未註明'
 	panel.classList.add('is-open')
+	panelBackdrop.classList.add('is-open')
 	panel.setAttribute('aria-hidden', 'false')
 }
 
 function closePanel() {
 	panel.classList.remove('is-open')
+	panelBackdrop.classList.remove('is-open')
 	panel.setAttribute('aria-hidden', 'true')
 	bookshelf?.closeSelection()
 }
@@ -388,6 +376,7 @@ async function loadBookshelf() {
 }
 
 document.querySelector('.panel-close')?.addEventListener('click', closePanel)
+panelBackdrop.addEventListener('click', closePanel)
 document.querySelector('.list-toggle')?.addEventListener('click', (event) => {
 	const button = event.currentTarget as HTMLButtonElement
 	const open = !list.classList.contains('is-open')
@@ -400,12 +389,4 @@ document.querySelector('.list-close')?.addEventListener('click', () => {
 	list.setAttribute('aria-hidden', 'true')
 	document.querySelector('.list-toggle')?.setAttribute('aria-expanded', 'false')
 })
-document.querySelector<HTMLButtonElement>('.theme-toggle')?.addEventListener('click', (event) => {
-	const button = event.currentTarget as HTMLButtonElement
-	const nextTheme = document.documentElement.dataset.theme === 'dark' ? 'light' : 'dark'
-	document.documentElement.dataset.theme = nextTheme
-	button.textContent = nextTheme === 'light' ? 'Dark' : 'Light'
-	bookshelf?.setTheme(nextTheme)
-})
-
 loadBookshelf()

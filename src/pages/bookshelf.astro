@@ -3,12 +3,13 @@ import '../styles/bookshelf.css'
 ---
 
 <!doctype html>
-<html lang="zh-Hant" data-theme="light">
+<html lang="zh-Hant">
 	<head>
 		<meta charset="utf-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1" />
 		<meta name="robots" content="noindex, nofollow" />
 		<meta name="description" content="Dylan Lin 的個人閱讀收藏。" />
+		<link rel="icon" href="/favicon.ico" sizes="any" />
 		<title>Bookshelf · Dylan Lin</title>
 	</head>
 	<body>
@@ -27,10 +28,10 @@ import '../styles/bookshelf.css'
 					<h1 id="bookshelf-heading">Books I keep<br />within reach.</h1>
 				</div>
 				<p class="bookshelf-status" role="status" aria-live="polite">正在載入書櫃…</p>
-				<p class="gesture-hint">上下左右滑動 · 點擊書籍</p>
 				<p class="book-position" aria-hidden="true"></p>
 			</section>
 
+			<button class="panel-backdrop" type="button" aria-label="關閉書籍詳情" tabindex="-1"></button>
 			<aside class="book-panel" aria-live="polite" aria-hidden="true">
 				<button class="panel-close" type="button" aria-label="關閉書籍詳情">×</button>
 				<p class="panel-label">Selected book</p>
@@ -45,7 +46,7 @@ import '../styles/bookshelf.css'
 				<div class="panel-sections">
 					<span>Overview</span><span>Notes</span><span>Highlights</span><span>Reflections</span><span>Connections</span>
 				</div>
-				<p class="panel-placeholder">閱讀內容會保留在每本書的 Notion 頁面。</p>
+				<p class="panel-placeholder">閱讀內容尚未公開。</p>
 			</aside>
 
 			<button class="list-toggle" type="button" aria-expanded="false">書單</button>
@@ -53,8 +54,6 @@ import '../styles/bookshelf.css'
 				<div class="book-list-header"><p>Bookshelf</p><button type="button" class="list-close">關閉</button></div>
 				<div class="book-list-items"></div>
 			</aside>
-
-			<button class="theme-toggle" type="button" aria-label="切換深淺色主題">Dark</button>
 		</main>
 
 		<script>

@@ -17,6 +17,8 @@ Configure these Production and Preview variables in Vercel:
 
 Keep both values server-only. Never expose either value through a public environment variable.
 
+Google OAuth is not part of the current Bookshelf flow. ChatGPT manages book records in Notion, and Google Books only supplies public cover images.
+
 ## Release sequence
 
 Commit, push, Preview, and Production are separate authorization gates.
@@ -39,6 +41,7 @@ Commit, push, Preview, and Production are separate authorization gates.
 - `/rss.xml`, `/robots.txt`, and `/sitemap-index.xml` return valid content.
 - `/bookshelf` loads current Notion books without a new deployment.
 - `/api/books` returns normalized book data without exposing the Notion token.
+- `/api/book-cover` returns a same-origin image for an allowed Google Books cover URL.
 - An unknown path uses the 404 page.
 - Page title, description, canonical URL, social metadata, keyboard navigation, and mobile layout are correct.
 - No comment, newsletter, Supabase, or Slack request appears in the browser network log.
