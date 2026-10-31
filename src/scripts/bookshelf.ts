@@ -13,6 +13,8 @@ type Book = {
 	palette: string
 }
 
+const renderPixelRatio = () => Math.min(window.devicePixelRatio, 2)
+
 class BookshelfScene {
 	private container: HTMLElement
 	private books: Book[]
@@ -45,7 +47,7 @@ class BookshelfScene {
 		this.onSelect = onSelect
 		this.focusIndex = Math.floor(books.length / 2)
 		this.renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true, powerPreference: 'high-performance' })
-		this.renderer.setPixelRatio(Math.min(window.devicePixelRatio, window.innerWidth < 720 ? 1.35 : 1.8))
+		this.renderer.setPixelRatio(renderPixelRatio())
 		this.renderer.setSize(window.innerWidth, window.innerHeight)
 		this.renderer.outputColorSpace = THREE.SRGBColorSpace
 		this.renderer.toneMapping = THREE.ACESFilmicToneMapping
@@ -118,7 +120,7 @@ class BookshelfScene {
 		return texture
 	}
 
-	private loadCover(book: Book, material: THREE.MeshStandardMaterial) {
+	private loadCover(book: Book, material: THREE.MeshBasicMaterial) {
 		if (!book.cover) return
 		const url = book.cover
 		new THREE.TextureLoader().load(
@@ -145,7 +147,11 @@ class BookshelfScene {
 		this.books.forEach((book, index) => {
 			const pageMaterial = new THREE.MeshStandardMaterial({ color: 0xe7ddca, roughness: 0.78 })
 			const spineMaterial = new THREE.MeshStandardMaterial({ color: book.palette, roughness: 0.54 })
-			const coverMaterial = new THREE.MeshStandardMaterial({ map: this.coverTexture(book, index), roughness: 0.46, metalness: 0.03 })
+			const coverMaterial = new THREE.MeshBasicMaterial({
+				map: this.coverTexture(book, index),
+				fog: false,
+				toneMapped: false,
+			})
 			const backMaterial = new THREE.MeshStandardMaterial({ color: book.palette, roughness: 0.62 })
 			const geometry = new THREE.BoxGeometry(1.48, 2.25, 0.24, 2, 2, 1)
 			const mesh = new THREE.Mesh(geometry, [pageMaterial, spineMaterial, pageMaterial, pageMaterial, coverMaterial, backMaterial])
@@ -241,7 +247,7 @@ class BookshelfScene {
 		this.camera.aspect = window.innerWidth / window.innerHeight
 		this.camera.position.z = window.innerWidth < 720 ? 10.5 : 12.5
 		this.camera.updateProjectionMatrix()
-		this.renderer.setPixelRatio(Math.min(window.devicePixelRatio, window.innerWidth < 720 ? 1.35 : 1.8))
+		this.renderer.setPixelRatio(renderPixelRatio())
 		this.renderer.setSize(window.innerWidth, window.innerHeight)
 	}
 

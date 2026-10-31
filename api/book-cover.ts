@@ -34,6 +34,26 @@ function allowedCoverUrl(value: string | null, base?: URL) {
 	}
 }
 
+function optimizedCoverUrl(source: URL) {
+	const url = new URL(source)
+	if (googleBooksHosts.has(url.hostname)) {
+		const zoom = Number(url.searchParams.get('zoom'))
+		if (!Number.isFinite(zoom) || zoom < 3) url.searchParams.set('zoom', '3')
+	}
+	if (url.hostname === 'cdn.kobo.com') {
+		const segments = url.pathname.split('/')
+		const bookImagesIndex = segments.indexOf('book-images')
+		const widthIndex = bookImagesIndex + 2
+		const heightIndex = bookImagesIndex + 3
+		if (/^\d+$/.test(segments[widthIndex] ?? '') && /^\d+$/.test(segments[heightIndex] ?? '')) {
+			segments[widthIndex] = String(Math.max(Number(segments[widthIndex]), 1200))
+			segments[heightIndex] = String(Math.max(Number(segments[heightIndex]), 1200))
+			url.pathname = segments.join('/')
+		}
+	}
+	return url
+}
+
 function loggableSource(value: string | null) {
 	if (!value) return null
 	try {
@@ -107,7 +127,7 @@ async function handleRequest(request: Request) {
 	}
 
 	try {
-		const response = await fetchCover(source)
+		const response = await fetchCover(optimizedCoverUrl(source))
 		const contentType = response.headers.get('content-type')?.split(';', 1)[0]?.trim().toLowerCase()
 		const contentLengthHeader = response.headers.get('content-length')
 		const contentLength = contentLengthHeader ? Number(contentLengthHeader) : null

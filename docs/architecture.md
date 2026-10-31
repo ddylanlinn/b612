@@ -16,8 +16,8 @@ This is one low-maintenance personal website for Dylan Lin's work, writing, and 
 ## Bookshelf flow
 
 1. `/api/books` reads normalized book metadata from the configured Notion data source.
-2. The browser loads Google Books covers through `/api/book-cover`.
-3. The cover proxy restricts upstream requests to Google Books image hosts and returns cacheable same-origin images for WebGL textures.
+2. The browser loads approved publisher covers through `/api/book-cover`.
+3. The cover proxy validates each source and upgrades supported Google Books and Kobo URLs to higher-resolution variants.
 4. A generated cover remains visible when an upstream image is missing or unavailable.
 
 ## Route policy
