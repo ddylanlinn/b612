@@ -14,6 +14,7 @@ type Book = {
 }
 
 const renderPixelRatio = () => Math.min(window.devicePixelRatio, 2)
+const coverQualityVersion = 'high-1'
 
 class BookshelfScene {
 	private container: HTMLElement
@@ -124,7 +125,7 @@ class BookshelfScene {
 		if (!book.cover) return
 		const url = book.cover
 		new THREE.TextureLoader().load(
-			`/api/book-cover?url=${encodeURIComponent(url)}`,
+			`/api/book-cover?url=${encodeURIComponent(url)}&quality=${coverQualityVersion}`,
 			(texture) => {
 				texture.colorSpace = THREE.SRGBColorSpace
 				texture.anisotropy = Math.min(8, this.renderer.capabilities.getMaxAnisotropy())
