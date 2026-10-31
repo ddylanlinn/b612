@@ -118,7 +118,9 @@ class BookshelfScene {
 		return texture
 	}
 
-	private loadCover(url: string, material: THREE.MeshStandardMaterial) {
+	private loadCover(book: Book, material: THREE.MeshStandardMaterial) {
+		if (!book.cover) return
+		const url = book.cover
 		new THREE.TextureLoader().load(
 			`/api/book-cover?url=${encodeURIComponent(url)}`,
 			(texture) => {
@@ -129,7 +131,13 @@ class BookshelfScene {
 				material.needsUpdate = true
 			},
 			undefined,
-			() => undefined,
+			(error) => {
+				console.error('[Bookshelf] Cover failed', {
+					title: book.title,
+					url,
+					error,
+				})
+			},
 		)
 	}
 
@@ -152,7 +160,7 @@ class BookshelfScene {
 			mesh.userData = { index, base, baseScale, baseRotation }
 			this.bookGroup.add(mesh)
 			this.bookMeshes.push(mesh)
-			if (book.cover) this.loadCover(book.cover, coverMaterial)
+			if (book.cover) this.loadCover(book, coverMaterial)
 		})
 	}
 
